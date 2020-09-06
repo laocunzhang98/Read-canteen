@@ -29,14 +29,12 @@ export default {
   methods: {
     setTheme(index) {
       let theme = this.themeList[index]
-      
+      saveTheme(this.fileName,theme.name)
       this.setDefaultTheme(theme.name).then(()=>{
-        this.currentBook.rendition.themes.select(this.defaultTheme)
-        
+        this.currentBook.rendition.themes.select(this.defaultTheme) 
         this.initGlobalStyle()
       })
       // this.currentBook.rendition.themes.select(this.defaultTheme)
-      saveTheme(this.fileName,theme.name)
     },
   },
 };

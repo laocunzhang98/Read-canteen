@@ -1,11 +1,13 @@
+import { getReadTime } from './localStorage'
+
 export const FONT_SIZE_LIST = [
-  {fontSize:12},
-  {fontSize:14},
-  {fontSize:16},
-  {fontSize:18},
-  {fontSize:20},
-  {fontSize:22},
-  {fontSize:24},
+  { fontSize: 12 },
+  { fontSize: 14 },
+  { fontSize: 16 },
+  { fontSize: 18 },
+  { fontSize: 20 },
+  { fontSize: 22 },
+  { fontSize: 24 },
 ]
 
 export const FONT_FAMILY = [
@@ -25,7 +27,7 @@ export function themeList(vue) {
           color: '#4c5059',
           background: '#cecece',
         },
-        
+
       }
     },
     {
@@ -36,7 +38,7 @@ export function themeList(vue) {
           color: '#5c5b56',
           background: '#c6c2b6',
         },
-        
+
       }
     },
     {
@@ -47,7 +49,7 @@ export function themeList(vue) {
           color: '#404c42',
           background: '#a9c1a9',
         },
-       
+
       }
     },
     {
@@ -58,7 +60,7 @@ export function themeList(vue) {
           color: '#cecece',
           background: '#000000',
         },
- 
+
       }
     }
   ]
@@ -66,14 +68,14 @@ export function themeList(vue) {
 export function addCss(href) {
   const link = document.createElement('link')
   link.setAttribute('rel', 'stylesheet')
-  link.setAttribute('type','text/css')
+  link.setAttribute('type', 'text/css')
   link.setAttribute('href', href)
   document.getElementsByTagName('head')[0].appendChild(link)
 }
 
 export function removeCss(href) {
   const links = document.getElementsByTagName('link')
-  for (let i = links.length-1; i >= 0; i--){
+  for (let i = links.length - 1; i >= 0; i--) {
     const link = links[i]
     if (link && link.getAttribute('href') && link.getAttribute('href') === href) {
       link.parentNode.removeChild(link)
@@ -85,4 +87,17 @@ export function removeAllCss() {
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_eye.css`)
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_gold.css`)
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_night.css`)
+}
+export function getReadTimeByMinute(fileName) {
+  let readTime = getReadTime(fileName)
+  if (!readTime) {
+    return 0
+  } else {
+    return Math.ceil(readTime / 60)
+  }
+}
+export function flatten(array) {
+  return [].concat(...array.map(item => {
+      return [].concat(item,...flatten(item.subitems))
+  }))
 }

@@ -1,4 +1,3 @@
-
 const book = {
   state: {
     fileName: '',

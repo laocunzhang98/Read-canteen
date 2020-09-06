@@ -37,9 +37,13 @@
 
 <script>
 import { ebookMixin } from "../../utils/mixin";
-import { saveLocale, saveLocation,getReadTime} from '../../utils/localStorage';
-import { saveProgress } from '../../utils/localStorage'
-
+import {
+  saveLocale,
+  saveLocation,
+  getReadTime,
+} from "../../utils/localStorage";
+import { saveProgress } from "../../utils/localStorage";
+import { getReadTimeByMinute } from "../../utils/book";
 export default {
   mixins: [ebookMixin],
   data() {
@@ -47,31 +51,20 @@ export default {
       isProgressLoading: false,
     };
   },
-  computed:{
-    getSectionName(){
+  computed: {
+    getSectionName() {
       // section 不为零 获取章节名字
-      if(this.section){
-        const sectionInfo = this.currentBook.section(this.section)
-        if(sectionInfo && sectionInfo.href){
-          return this.currentBook.navigation.get(sectionInfo.href).label
+      if (this.section) {
+        const sectionInfo = this.currentBook.section(this.section);
+        if (sectionInfo && sectionInfo.href) {
+          return this.currentBook.navigation.get(sectionInfo.href).label;
         }
       }
-      return ''
-    }
+      return "";
+    },
   },
   methods: {
-    getReadTimeText(){
-      // let readTime = getReadTime(this.fileName)
-      return this.$t('book.haveRead').replace('$1',this.getReadTimeByMinute())
-    },
-    getReadTimeByMinute(){
-      let readTime = getReadTime(this.fileName)
-      if(!readTime){
-        return 0
-      }else{
-        return Math.ceil(readTime/60)
-      }
-    },
+    
     displaySection() {
       // console.log(this.currentBook.section(this.section));
       // 跳转到指定地址
@@ -82,12 +75,12 @@ export default {
         });
       }
     },
-    
+
     prevSection() {
       if (this.section > 0 && this.bookAvailable) {
         this.setSection(this.section - 1).then(() => {
           this.displaySection();
-          this.updateProgressBg()
+          this.updateProgressBg();
         });
       }
     },
@@ -98,7 +91,7 @@ export default {
       ) {
         this.setSection(this.section + 1).then(() => {
           this.displaySection();
-          this.updateProgressBg()
+          this.updateProgressBg();
         });
       }
     },
@@ -116,7 +109,7 @@ export default {
       const cfi = this.currentBook.locations.cfiFromPercentage(
         this.progress / 100
       );
-      this.display(cfi)
+      this.display(cfi);
     },
     updateProgressBg() {
       this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`;
@@ -200,10 +193,8 @@ export default {
       @include center;
       .progress-section-text {
         line-height: px2rem(30);
-        
+
         @include ellipsis;
-      }
-      .progress-text {
       }
     }
   }
