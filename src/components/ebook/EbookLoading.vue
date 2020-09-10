@@ -13,7 +13,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { px2rem } from '@/utils/utils'
+  import { px2rem } from '../../utils/utils'
 
   export default {
     data() {

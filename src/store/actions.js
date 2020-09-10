@@ -1,5 +1,6 @@
 const actions = {
   setFontFamilyVisible: ({ commit }, visible) => {
+    // context.commit
     return commit('SET_FONT_FAMILY_VISIBLE', visible)
   },
   setDefaultFontFamily: ({ commit }, font) => {

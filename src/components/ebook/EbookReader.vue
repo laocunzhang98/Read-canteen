@@ -1,6 +1,8 @@
 <template>
   <div class="ebook-reader">
+    <div class="ebook-reader-mask" @touchmove="move" @touchend="moveEnd" @click="onMaskClick"></div>
     <div id="read"></div>
+
   </div>
 </template>
 
@@ -33,6 +35,36 @@ export default {
     });
   },
   methods: {
+    onMaskClick(e) {
+        if (this.mouseMove === 2) {
+        } else if (this.mouseMove === 1 || this.mouseMove === 4) {
+          const offsetX = e.offsetX
+          const width = window.innerWidth
+          if (offsetX > 0 && offsetX < width * 0.3) {
+            this.prevPage()
+          } else if (offsetX > 0 && offsetX > width * 0.7) {
+            this.nextPage()
+          } else {
+            this.toggleTitleAndMenu()
+          }
+        }
+        this.mouseMove = 4
+      },
+    move(e) {
+      let offsetY = 0;
+      if (this.firstOffsetY) {
+        offsetY = e.changedTouches[0].clientY - this.firstOffsetY;
+        this.$store.commit("SET_OFFSETY", offsetY);
+      } else {
+        this.firstOffsetY = e.changedTouches[0].clientY;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    moveEnd(e) {
+      this.setOffsetY(0);
+      this.firstOffsetY = 0;
+    },
     //     ...mapActions在methods中进行混入
     // 上一页
     prevPage() {
@@ -181,7 +213,7 @@ export default {
       this.setCurrentBook(this.book);
       // console.log(this.book);
       this.initRendition();
-      this.initGesture();
+      // this.initGesture();
       this.initTheme();
       this.initFontSize();
       this.parseBook();
@@ -202,5 +234,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../assets/styles/global";
+.ebook-reader {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  .ebook-reader-mask {
+    position: absolute;
+    z-index: 150;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>

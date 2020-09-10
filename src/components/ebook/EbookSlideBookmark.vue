@@ -13,7 +13,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import Scroll from '/components/Scroll'
+  import Scroll from '../common/Scroll'
   import { getBookmark } from '../../utils/localStorage'
   import { ebookMixin } from '../../utils/mixin'
 

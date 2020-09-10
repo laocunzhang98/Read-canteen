@@ -1,5 +1,6 @@
 <template>
-  <div class="ebook">
+  <div class="ebook" ref="ebookView">
+    <ebook-bookmark></ebook-bookmark>
     <ebook-title></ebook-title>
     <ebook-reader></ebook-reader>
     <ebook-menu></ebook-menu>
@@ -9,25 +10,48 @@
 import EbookReader from "../../components/ebook/EbookReader";
 import EbookTitle from "../../components/ebook/EbookTitle";
 import EbookMenu from "../../components/ebook/EbookMenu";
+import EbookBookmark from "../../components/ebook/EbookBookmark";
 import { getReadTime, saveReadTime } from "../../utils/localStorage";
-import {ebookMixin} from '../../utils/mixin'
+import { ebookMixin } from "../../utils/mixin";
 export default {
   name: "ebook",
   components: {
     EbookReader,
     EbookTitle,
     EbookMenu,
+    EbookBookmark,
   },
-  mixins:[ebookMixin],
-  mounted(){
-    this.startLoopReadTime()
+  watch: {
+    offsetY(v) {
+      if (this.isPaginating === true && !this.menuVisible) {
+        if (v === 0) {
+          this.restore();
+        } else if (v > 0) {
+          this.move(v);
+        }
+      }
+    },
   },
-  beforeDestroy(){
-    if(this.task){
-      clearInterval(this.task)
+  mixins: [ebookMixin],
+  mounted() {
+    this.startLoopReadTime();
+  },
+  beforeDestroy() {
+    if (this.task) {
+      clearInterval(this.task);
     }
   },
   methods: {
+    restore() {
+      this.$refs.ebookView.style.top = 0;
+      this.$refs.ebookView.style.transition = "all .2s linear";
+      setTimeout(() => {
+        this.$refs.ebookView.style.transition = "";
+      }, 200);
+    },
+    move(offsetY) {
+      this.$refs.ebookView.style.top = offsetY + "px";
+    },
     startLoopReadTime() {
       let readTime = getReadTime(this.fileName);
       if (!readTime) {
@@ -43,5 +67,13 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+.ebook {
+  background-color: grey;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
 </style>
