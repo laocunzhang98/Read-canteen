@@ -54,17 +54,16 @@ export default {
   computed: {
     getSectionName() {
       // section 不为零 获取章节名字
-      if (this.section) {
-        const sectionInfo = this.currentBook.section(this.section);
-        if (sectionInfo && sectionInfo.href) {
-          return this.currentBook.navigation.get(sectionInfo.href).label;
-        }
-      }
-      return "";
+      // if (this.section) {
+      //   const sectionInfo = this.currentBook.section(this.section);
+      //   if (sectionInfo && sectionInfo.href) {
+      //     return this.currentBook.navigation.get(sectionInfo.href).label;
+      //   }
+      // }
+      return this.section ? this.navigation[this.section].label : "";
     },
   },
   methods: {
-    
     displaySection() {
       // console.log(this.currentBook.section(this.section));
       // 跳转到指定地址

@@ -1,5 +1,5 @@
 import { mapActions, mapGetters } from 'vuex';
-import { themeList, addCss, removeAllCss,getReadTimeByMinute } from './book'
+import { themeList, addCss, removeAllCss, getReadTimeByMinute } from './book'
 import { saveLocation } from './localStorage'
 export const ebookMixin = {
   computed: {
@@ -80,11 +80,13 @@ export const ebookMixin = {
       // const startCfi = this.currentBook.locations.percentageFromCfi(
       //   currentLocation.start.cfi
       // );
-      let process = Math.floor(currentLocation.start.percentage * 100)
-      console.log(process);
-      this.setProgress(process)
-      this.setSection(currentLocation.start.index)
-      saveLocation(this.fileName, currentLocation.start.cfi)
+      if (currentLocation && currentLocation.start) {
+        let process = Math.floor(currentLocation.start.percentage * 100)
+        this.setProgress(process)
+        this.setSection(currentLocation.start.index)
+        saveLocation(this.fileName, currentLocation.start.cfi)
+      }
+
     },
     display(target, callback) {
       if (target) {
