@@ -8,7 +8,7 @@
         {{text}}
       </div>
     </div>
-    <div class="ebook-bookmark-icon-wrapper" :style="fixed && !isPaginating ? fixedStyle : {}">
+    <div class="ebook-bookmark-icon-wrapper" :style="fixed && isPaginating ? fixedStyle : {}">
       <book-mark :width="30" :height="70" :color="color" ref="bookmark"></book-mark>
     </div>
   </div>
@@ -29,10 +29,10 @@
     },
     computed: {
       height() {
-        return realPx(70)
+        return realPx(50)
       },
       threshold() {
-        return realPx(110)
+        return realPx(70)
       },
       fixedStyle() {
         return {
@@ -44,9 +44,10 @@
     },
     watch: {
       offsetY(v) {
-        if (this.settingVisible > 0 || this.menuVisible || this.isPaginating) {
+        if (this.settingVisible > 0 || this.menuVisible || !this.isPaginating) {
           return
         }
+        
         if (v >= this.height && v < this.threshold) {
           this.setBookmark = false
           this.$refs.ebookBookmark.style.top = `${-v}px`
@@ -134,11 +135,14 @@
           this.bookmark = []
         }
         const currentLocation = this.currentBook.rendition.currentLocation()
+        console.log(currentLocation);
         const cfibase = currentLocation.start.cfi.replace(/!.*/, '').replace('epubcfi(', '')
         const cfistart = currentLocation.start.cfi.replace(/.*!/, '').replace(/\)/, '')
         const cfiend = currentLocation.end.cfi.replace(/.*!/, '').replace(/\)/, '')
         const cfiRange = `epubcfi(${cfibase}!,${cfistart},${cfiend})`
+        console.log(cfiRange);
         const cfi = currentLocation.start.cfi
+        console.log(cfi);
         this.currentBook.getRange(cfiRange).then(range => {
           let text = range.toString()
           text = text.replace(/\s\s/g, '')
@@ -146,6 +150,7 @@
           text = text.replace(/\n/g, '')
           text = text.replace(/\t/g, '')
           text = text.replace(/\f/g, '')
+          console.log(text);
           this.bookmark.push({
             cfi: cfi,
             text: text

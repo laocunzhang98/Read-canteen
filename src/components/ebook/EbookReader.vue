@@ -1,8 +1,9 @@
 <template>
   <div class="ebook-reader">
-    <div class="ebook-reader-mask" @touchmove="move" @touchend="moveEnd" @click="onMaskClick"></div>
+    <div class="ebook-reader-mask" @touchmove="move" @touchend="moveEnd" @click="onMaskClick" @mousedown.left="onMouseEnter"
+         @mousemove.left="onMouseMove"
+         @mouseup.left="onMouseEnd"></div>
     <div id="read"></div>
-
   </div>
 </template>
 
@@ -36,20 +37,20 @@ export default {
   },
   methods: {
     onMaskClick(e) {
-        if (this.mouseMove === 2) {
-        } else if (this.mouseMove === 1 || this.mouseMove === 4) {
-          const offsetX = e.offsetX
-          const width = window.innerWidth
-          if (offsetX > 0 && offsetX < width * 0.3) {
-            this.prevPage()
-          } else if (offsetX > 0 && offsetX > width * 0.7) {
-            this.nextPage()
-          } else {
-            this.toggleTitleAndMenu()
-          }
+      if (this.mouseMove === 2) {
+      } else if (this.mouseMove === 1 || this.mouseMove === 4) {
+        const offsetX = e.offsetX;
+        const width = window.innerWidth;
+        if (offsetX > 0 && offsetX < width * 0.3) {
+          this.prevPage();
+        } else if (offsetX > 0 && offsetX > width * 0.7) {
+          this.nextPage();
+        } else {
+          this.toggleTitleAndMenu();
         }
-        this.mouseMove = 4
-      },
+      }
+      this.mouseMove = 4;
+    },
     move(e) {
       let offsetY = 0;
       if (this.firstOffsetY) {
@@ -65,6 +66,42 @@ export default {
       this.setOffsetY(0);
       this.firstOffsetY = 0;
     },
+    onMouseEnter(e) {
+      this.mouseMove = 1;
+      this.mouseStartTime = e.timeStamp;
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    onMouseMove(e) {
+      if (this.mouseMove === 1) {
+        this.mouseMove = 2;
+      } else if (this.mouseMove === 2) {
+        let offsetY = 0;
+        if (this.firstOffsetY) {
+          offsetY = e.clientY - this.firstOffsetY;
+          this.$store.commit("SET_OFFSETY", offsetY);
+        } else {
+          this.firstOffsetY = e.clientY;
+        }
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    onMouseEnd(e) {
+      if (this.mouseMove === 2) {
+        this.$store.dispatch("setOffsetY", 0);
+        this.firstOffsetY = 0;
+        this.mouseMove = 3;
+      }
+      this.mouseEndTime = e.timeStamp;
+      const time = this.mouseEndTime - this.mouseStartTime;
+      if (time < 200) {
+        this.mouseMove = 1;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    },
+
     //     ...mapActions在methods中进行混入
     // 上一页
     prevPage() {
@@ -127,6 +164,7 @@ export default {
       this.rendition = this.book.renderTo("read", {
         width: innerWidth,
         height: innerHeight,
+        // 微信中加入
         // method: "default",
       });
       // 获取local Storage中的location（cfi）
@@ -213,7 +251,7 @@ export default {
       this.setCurrentBook(this.book);
       // console.log(this.book);
       this.initRendition();
-      // this.initGesture();
+      this.initGesture();
       this.initTheme();
       this.initFontSize();
       this.parseBook();
@@ -234,7 +272,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss" scoped>
 @import "../../assets/styles/global";
 .ebook-reader {
   width: 100%;

@@ -39,7 +39,7 @@
     height: 0;
     font-weight: bold;
     line-height: 0;
-    border-width: px2rem(100) px2rem(20) px2rem(20) px2rem(20);
+    border-width: px2rem(70) px2rem(20) px2rem(20) px2rem(20);
     border-style: solid;
     border-color: white white transparent white;
   }

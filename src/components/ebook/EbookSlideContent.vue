@@ -34,7 +34,7 @@
           <span class="progress">{{progress + '%'}}</span>
           <span class="progress-text">{{$t('book.haveRead2')}}</span>
         </div>
-        <div class="slide-contents-book-time">{{}}</div>
+        <div class="slide-contents-book-time">{{getReadTimeText()}}</div>
       </div>
     </div>
     <scroll class="slide-contents-list" :top="156" :bottom="48" ref="scroll" v-show="!searchVisible">
@@ -171,7 +171,7 @@
           box-sizing: border-box;
           @include left;
           .slide-contents-book-title-text {
-            @include ellipsis2(1);
+            @include ellipsis2(2);
           }
           
         }

@@ -1,6 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import { themeList, addCss, removeAllCss, getReadTimeByMinute } from './book'
-import { saveLocation } from './localStorage'
+import { saveLocation, getBookmark } from './localStorage'
 export const ebookMixin = {
   computed: {
     ...mapGetters([
@@ -28,7 +28,16 @@ export const ebookMixin = {
     themeList() {
       return themeList(this);
     },
-
+    getSectionName() {
+      // section 不为零 获取章节名字
+      // if (this.section) {
+      //   const sectionInfo = this.currentBook.section(this.section);
+      //   if (sectionInfo && sectionInfo.href) {
+      //     return this.currentBook.navigation.get(sectionInfo.href).label;
+      //   }
+      // }
+      return this.section ? this.navigation[this.section].label : "";
+    },
   },
   methods: {
     ...mapActions([
@@ -85,6 +94,14 @@ export const ebookMixin = {
         this.setProgress(process)
         this.setSection(currentLocation.start.index)
         saveLocation(this.fileName, currentLocation.start.cfi)
+        const bookmark = getBookmark(this.fileName)
+        if (bookmark) {
+          if (bookmark.some(item => item.cfi === currentLocation.start.cfi)) {
+            this.setIsBookmark(true)
+          }
+        } else {
+          this.setIsBookmark(false)
+        }
       }
 
     },

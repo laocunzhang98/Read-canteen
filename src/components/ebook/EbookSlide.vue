@@ -33,18 +33,19 @@
 <script>
   import EbookLoading from './EbookLoading'
   import EbookContent from './EbookSlideContent'
-  // import EbookBookmark from './EbookSlideBookmark'
+  import EbookBookmark from './EbookSlideBookmark'
   import { ebookMixin } from '../../utils/mixin'
 
   export default {
     mixins: [ebookMixin],
     components: {
-      EbookLoading
+      EbookLoading,
     },
     data() {
       return {
         tab: 1,
-        content:EbookContent
+        content:EbookContent,
+        bookmark: EbookBookmark
       }
     },
     methods: {

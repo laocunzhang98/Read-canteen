@@ -1,5 +1,5 @@
 import { getReadTime } from './localStorage'
-
+import { realPx } from './utils'
 export const FONT_SIZE_LIST = [
   { fontSize: 12 },
   { fontSize: 14 },
@@ -26,6 +26,8 @@ export function themeList(vue) {
         body: {
           color: '#4c5059',
           background: '#cecece',
+          'padding-top': `${realPx(48)}px!important`,
+          'padding-bottom': `${realPx(48)}px!important`
         },
 
       }
@@ -37,6 +39,8 @@ export function themeList(vue) {
         body: {
           color: '#5c5b56',
           background: '#c6c2b6',
+          'padding-top': `${realPx(48)}px!important`,
+          'padding-bottom': `${realPx(48)}px!important`
         },
 
       }
@@ -48,6 +52,8 @@ export function themeList(vue) {
         body: {
           color: '#404c42',
           background: '#a9c1a9',
+          'padding-top': `${realPx(48)}px!important`,
+          'padding-bottom': `${realPx(48)}px!important`
         },
 
       }
@@ -59,6 +65,8 @@ export function themeList(vue) {
         body: {
           color: '#cecece',
           background: '#000000',
+          'padding-top': `${realPx(48)}px!important`,
+          'padding-bottom': `${realPx(48)}px!important`
         },
 
       }
@@ -98,6 +106,6 @@ export function getReadTimeByMinute(fileName) {
 }
 export function flatten(array) {
   return [].concat(...array.map(item => {
-      return [].concat(item,...flatten(item.subitems))
+    return [].concat(item, ...flatten(item.subitems))
   }))
 }
