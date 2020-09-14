@@ -135,14 +135,11 @@
           this.bookmark = []
         }
         const currentLocation = this.currentBook.rendition.currentLocation()
-        console.log(currentLocation);
         const cfibase = currentLocation.start.cfi.replace(/!.*/, '').replace('epubcfi(', '')
         const cfistart = currentLocation.start.cfi.replace(/.*!/, '').replace(/\)/, '')
         const cfiend = currentLocation.end.cfi.replace(/.*!/, '').replace(/\)/, '')
         const cfiRange = `epubcfi(${cfibase}!,${cfistart},${cfiend})`
-        console.log(cfiRange);
         const cfi = currentLocation.start.cfi
-        console.log(cfi);
         this.currentBook.getRange(cfiRange).then(range => {
           let text = range.toString()
           text = text.replace(/\s\s/g, '')

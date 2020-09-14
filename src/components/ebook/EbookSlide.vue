@@ -70,7 +70,6 @@
     .content {
       flex: 0 0 85%;
       width: 85%;
-      // background-color: gray;
       height: 100%;
       .content-page-wrapper {
         display: flex;
