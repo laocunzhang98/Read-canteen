@@ -402,6 +402,144 @@ new Vue({
 
   $t('book.selectFont')
 ```
+## read-canteen开发回顾（二）
+
+### 书籍目录与书签
+
+### 1.目录实现
+
+```javascript
+// epubjs内置方法
+getSectionName() {
+      // section 不为零 获取章节名字
+      // if (this.section) {
+      //   const sectionInfo = this.currentBook.section(this.section);
+      //   if (sectionInfo && sectionInfo.href) {
+      //     return this.currentBook.navigation.get(sectionInfo.href).label;
+      //   }
+      // }
+      return this.section ? this.navigation[this.section].label : "";
+    },
+```
+
+#### navigation数据可能是多级目录
+
+```javascript
+this.book.loaded.navigation.then((nav) => {
+        // console.log(flatten(nav.toc));
+        const navItem = flatten(nav.toc); // 利用一个flatten函数分级
+        function find(item, level = 0) {
+          return !item.parent
+            ? level
+            : find(
+                navItem.filter(
+                  (parentItem) => parentItem.id === item.parent
+                )[0],
+                ++level
+              );
+        }
+        navItem.forEach((item) => {
+          item.level = find(item);
+        });
+        // console.log(navItem);
+        this.setNavigation(navItem);
+      });
+```
+
+#### flatten函数
+
+```javascript
+export function flatten(array) {
+  return [].concat(...array.map(item => {
+    return [].concat(item, ...flatten(item.subitems))
+  }))
+}
+```
+
+### 2.文章内容搜索
+
+```javascript
+search() {
+        this.doSearch(this.searchText).then(result => {
+          this.searchList = result.map(item => {
+            item.excerpt = item.excerpt.replace(this.searchText, `<span class="content-search-text">${this.searchText}</span>`)
+            return item
+          })
+          this.$refs.searchInput.blur()
+        })
+      },
+ doSearch(q) {
+        return Promise.all(
+          this.currentBook.spine.spineItems.map(
+            item => item.load(this.currentBook.load.bind(this.currentBook)).then(item.find.bind(item, q)).finally(item.unload.bind(item)))
+        ).then(results => Promise.resolve([].concat.apply([], results)))
+      }
+```
+
+#### 对搜索出的内容进行高亮显示
+
+```javascript
+displaySearch(target,highlight=false){
+        this.display(target,()=>{
+          this.hideTitleAndMenu()
+          if(highlight){//高亮显示
+            this.currentBook.rendition.annotations.highlight(target)
+          }
+        })
+      },
+```
+
+## 3.技术难点书签实现
+
+#### 功能描述
+
+- 下拉页面加入书签，再次下拉页面登出书签
+
+- 在书签页添加书签链接，点击跳转到书签页
+- 获取书签页的文本内容
+
+#### 具体实现
+
+- 使用css创建一个书签图标 
+- 监听手势操作控制书签各种动画功能 使用了watch进行监听offsetY值得变化
+
+- 创建书签链接 将本文和cfi保存如localstorage中
+- 书签页跳转链接并隐藏菜单栏 重写display 方法
+- 在连续下拉时出现卡顿情况 需利定时器控制下拉解决卡顿
+- 主要还是应用vuex 中的state变量对各种操作进行控制
+- epubjs的各种内置方法的使用
+
+```javascript
+// 保存文本书签信息
+setAndSaveBookmark() {
+        this.bookmark = getBookmark(this.fileName)
+        if (!this.bookmark) {
+          this.bookmark = []
+        }
+        const currentLocation = this.currentBook.rendition.currentLocation()
+        const cfibase = currentLocation.start.cfi.replace(/!.*/, '').replace('epubcfi(', '')
+        const cfistart = currentLocation.start.cfi.replace(/.*!/, '').replace(/\)/, '')
+        const cfiend = currentLocation.end.cfi.replace(/.*!/, '').replace(/\)/, '')
+        const cfiRange = `epubcfi(${cfibase}!,${cfistart},${cfiend})`
+        const cfi = currentLocation.start.cfi
+        this.currentBook.getRange(cfiRange).then(range => {
+          let text = range.toString()
+          text = text.replace(/\s\s/g, '')
+          text = text.replace(/\r/g, '')
+          text = text.replace(/\n/g, '')
+          text = text.replace(/\t/g, '')
+          text = text.replace(/\f/g, '')
+          console.log(text);
+          this.bookmark.push({
+            cfi: cfi,
+            text: text
+          })
+          this.setIsBookmark(true)
+          saveBookmark(this.fileName, this.bookmark)
+        })
+      },
+```
+
 
 
 
