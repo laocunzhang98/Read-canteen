@@ -151,7 +151,10 @@ export default {
       .title-text-wrapper {
         width: 100%;
         height: px2rem(84);
-        @include center
+        @include center;
+        .title{
+          font-size:px2rem(30)
+        }
       }
 
       .title-icon-shake-wrapper {
@@ -159,6 +162,9 @@ export default {
         right: px2rem(30);
         top: 0;
         height: px2rem(84);
+        .icon-shake{
+          line-height: px2rem(84);
+        }
       }
     }
 
