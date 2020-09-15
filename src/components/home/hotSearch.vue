@@ -20,20 +20,20 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { realPx } from '../../utils/utils'
+import { realPx } from '../../utils/utils'
 
-  export default {
-    props: {
-      label: String,
-      btn: String,
-      hotSearch: Array
-    },
-    mounted() {
-      this.$refs.searchText.forEach(item => {
-        item.style.width = window.innerWidth - realPx(20) - realPx(40) + 'px'
-      })
-    }
+export default {
+  props: {
+    label: String,
+    btn: String,
+    hotSearch: Array
+  },
+  mounted () {
+    this.$refs.searchText.forEach(item => {
+      item.style.width = window.innerWidth - realPx(20) - realPx(40) + 'px'
+    })
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
@@ -42,15 +42,17 @@
   .hot-search-title {
     display: flex;
     width: 100%;
-    font-size: px2rem(13);
-    padding: px2rem(10);
+    font-size: px2rem(26);
+    padding: px2rem(20);
     box-sizing: border-box;
+
     .label {
       flex: 1;
       text-align: left;
       font-weight: bold;
       color: #666;
     }
+
     .btn {
       flex: 1;
       text-align: right;
@@ -58,40 +60,48 @@
       color: #409EFF;
     }
   }
+
   .hot-search-list {
     width: 100%;
-    padding: 0 px2rem(10);
+    padding: 0 px2rem(20);
     box-sizing: border-box;
+
     .hot-search-item {
-      padding: px2rem(10) 0;
+      padding: px2rem(20) 0;
       display: flex;
+
       .icon-wrapper {
-        flex: 0 0 px2rem(40);
+        flex: 0 0 px2rem(80);
         @include center;
+
         .icon-book {
-          font-size: px2rem(16);
+          font-size: px2rem(32);
         }
+
         .icon-search {
-          font-size: px2rem(16);
+          font-size: px2rem(32);
         }
       }
+
       .hot-search-text-wrapper {
         flex: 1;
-        height: px2rem(35);
+        height: px2rem(70);
         @include columnLeft;
+
         .text {
           flex: 1;
           height: 100%;
-          @include ellipsis;
-          @include left;
-          font-size: px2rem(14);
+          font-size: px2rem(28);
           font-weight: bold;
           color: #666;
+          @include ellipsis;
+          @include left;
         }
+
         .num {
-          font-size: px2rem(12);
+          font-size: px2rem(24);
           color: #999;
-          margin-top: px2rem(5);
+          margin-top: px2rem(10);
         }
       }
     }

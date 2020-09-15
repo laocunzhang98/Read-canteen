@@ -1,80 +1,84 @@
 <template>
   <div class="store-home">
-    <search-bar :ifShowSearchPage="ifShowSearchPage" :ifShowHotSearch="ifShowHotSearch" ref="searchBar"></search-bar>
-    <scroll :top="188" @onScroll="onScroll">
-      <div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-        <div>111111</div>
-      </div>
+    <search-bar
+      :ifShowSearchPage="ifShowSearchPage"
+      :ifShowHotSearch="ifShowHotSearch"
+      :bookListOffsetY="bookListOffsetY"
+      @back="onBack"
+      ref="searchBar"
+    ></search-bar>
+    <scroll :top="188" @onScroll="onScroll" ref="scroll">
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
+      <div>111111</div>
     </scroll>
   </div>
 </template>
@@ -92,12 +96,23 @@ export default {
     return {
       ifShowSearchPage: false,
       ifShowHotSearch: true,
+      bookListOffsetY: 0,
+      scrollTop: 188,
     };
   },
   methods: {
-    onScroll(offsetY) {
-      this.setOffsetY(offsetY);
+    onBack() {
+      this.isBack = true;
     },
+    onScroll (offsetY) {
+      this.setOffsetY(offsetY)
+      if (offsetY > 0) {
+        this.scrollTop = 104
+      } else {
+        this.scrollTop = 188
+      }
+      this.$refs.scroll.refresh()
+    }
   },
 };
 </script>
