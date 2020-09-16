@@ -80,7 +80,7 @@
       <div>111111</div>
       <div>111111</div>
     </scroll>
-    <flap-card v-show="flapCardVisible"></flap-card>
+    <flap-card v-show="flapCardVisible" :data="random"></flap-card>
   </div>
 </template>
 <script>
@@ -88,6 +88,7 @@ import SearchBar from "../../components/home/SearchBar";
 import Scroll from "../../components/common/Scroll";
 import FlapCard from "../../components/home/FlapCard"
 import { storeHomeMixin } from "../../utils/mixin";
+import {home} from "../../api/store"
 export default {
   mixins: [storeHomeMixin],
   components: {
@@ -95,12 +96,23 @@ export default {
     Scroll,
     FlapCard
   },
+  mounted(){
+    home().then(response=>{
+      if(response && response.status==200){
+        const data = response.data
+        console.log(data.random.length);
+        const randomIndex = Math.floor(Math.random()*data.random.length)
+        this.random = data.random[randomIndex]
+      }
+    })
+  },
   data() {
     return {
       ifShowSearchPage: false,
       ifShowHotSearch: true,
       bookListOffsetY: 0,
       scrollTop: 188,
+      random:null
     };
   },
   methods: {
